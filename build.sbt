@@ -2,11 +2,11 @@ val scala3Version = "3.7.3"
 
 inThisBuild(
   List(
-    name                 := "E5-and-Dragons",
-    version              := "0.1.0-SNAPSHOT",
-    organization         := "io.github.guihardbastien",
-    scalaVersion         := scala3Version,
-    semanticdbEnabled    := true
+    name              := "E5-and-Dragons",
+    version           := "0.1.0-SNAPSHOT",
+    organization      := "io.github.guihardbastien",
+    scalaVersion      := scala3Version,
+    semanticdbEnabled := true
   )
 )
 
@@ -25,6 +25,14 @@ lazy val endGame =
     )
     .dependsOn(exploration, combat, socialInteraction)
 
+// COMMONS
+lazy val commons =
+  (project in file("commons"))
+    .settings(
+      name := "commons",
+      libraryDependencies ++= Seq(munit)
+    )
+
 // CORE
 lazy val exploration =
   (project in file("core/exploration"))
@@ -32,6 +40,7 @@ lazy val exploration =
       name := "exploration",
       libraryDependencies ++= Seq(munit)
     )
+    .dependsOn(commons)
 
 lazy val combat =
   (project in file("core/combat"))
@@ -39,6 +48,7 @@ lazy val combat =
       name := "combat",
       libraryDependencies ++= Seq(munit)
     )
+    .dependsOn(commons)
 
 lazy val socialInteraction =
   (project in file("core/social-interaction"))
@@ -48,3 +58,11 @@ lazy val socialInteraction =
     )
 
 // INFRA
+
+lazy val infra =
+  (project in file("infra/"))
+    .settings(
+      name := "infra",
+      libraryDependencies ++= Seq(munit)
+    )
+    .dependsOn(combat, exploration)

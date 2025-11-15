@@ -2,4 +2,5 @@
 ## Goal
 ## Project structure
 tba
+## About scalafmt
 ## Work submission
