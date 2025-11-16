@@ -1,6 +1,6 @@
 package domain
 
-import characters.{CardinalDirection, NextAction}
+import actions.{CardinalDirection, NextAction}
 import in.ForMovingCharacter
 
 class MovementEngine() extends ForMovingCharacter:

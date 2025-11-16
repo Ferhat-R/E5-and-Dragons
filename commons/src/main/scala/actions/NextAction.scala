@@ -1,4 +1,4 @@
-package characters
+package actions
 
 enum NextAction:
   case FIGHT, MOVE, TALK, LOOT

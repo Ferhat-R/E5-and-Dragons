@@ -1,3 +1,3 @@
 package characters
 
-final case class DndCharacter(dndClass: DndClass, dndRace: DndRace, shout: String, armorClass: Int, hp: Int)
+final case class DndCharacter(dndRace: DndRace, dndClass: DndClass, shout: String, armorClass: Int, hp: Int, gold: Int)

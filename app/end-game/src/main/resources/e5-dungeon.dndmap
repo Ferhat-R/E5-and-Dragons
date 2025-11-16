@@ -1,5 +1,15 @@
-C       - 3 - 4
-NPC     - 1 - 0
-PC      - 2 - 1
-T       - 0 - 3 - 2
-A       - 1 - 1 - S
+-- Map of 3(width) x 4(height)
+-- Origin point is top left
+M - 3 - 4
+
+-- NPC coordinates (1,0)
+NPC - 1 - 0
+
+-- PC(villain) coordinates (2,1), lvl, class, race, AC, HP
+PC - 2 - 1 - 6 - HUMAN - PALADIN - 13 - 25
+
+-- Character coordinates (2,1), lvl, class, race, AC, HP, Orientation
+C - 0 - 0 - 6 - HUMAN - PALADIN - 13 - 25 - S
+
+-- Gold Pieces coordinates, amount
+GP - 0 - 3 - 2

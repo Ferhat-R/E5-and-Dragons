@@ -1,14 +1,15 @@
 package characters
 
+import actions.CombatAction
 import rolls.Die.D6
 
 enum DndClass:
   case PALADIN(lvl: Int) extends DndClass
 
-  def action: Action =
+  def action: CombatAction =
     this match
-      case DndClass.PALADIN(_) => Action(2, D6)
+      case DndClass.PALADIN(_) => CombatAction(2, D6)
 
-  def bonusAction: Option[Action] =
+  def bonusAction: Option[CombatAction] =
     this match
-      case DndClass.PALADIN(lvl) => if lvl > 3 then Some(Action(1, D6)) else None
+      case DndClass.PALADIN(lvl) => if lvl > 3 then Some(CombatAction(1, D6)) else None

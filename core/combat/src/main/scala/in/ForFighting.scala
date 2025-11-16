@@ -15,4 +15,4 @@ trait ForFighting:
    * allows for a Bonus Action, the character rolls the die (or dice)
    * associated with that Bonus Action effect.
    */
-  def fight(character1: DndCharacter, character2: DndCharacter): Either[Death, NewCharacterState]
+  def fight(character: DndCharacter, villain: DndCharacter): Either[Death, NewCharacterState]

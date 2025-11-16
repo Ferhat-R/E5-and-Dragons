@@ -1,6 +1,6 @@
 package in
 
-import characters.{CardinalDirection, NextAction}
+import actions.{CardinalDirection, NextAction}
 
 trait   ForMovingCharacter:
   def move(cardinalDirection: CardinalDirection): NextAction
