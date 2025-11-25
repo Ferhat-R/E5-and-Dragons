@@ -4,8 +4,11 @@ import errors.MapError
 import errors.MapError.IllegalMapFormat
 import in.ForValidatingMap
 import actions.CardinalDirection
+import out.ExplorationDataPortOut
+import model.{DndMapState, Position, OrientedCharacter}
+import characters.DndCharacter
 
-class MapManager() extends ForValidatingMap:
+class MapManager(storage: ExplorationDataPortOut) extends ForValidatingMap:
   override def validateAndStoreMap(dataLines: List[String]): Either[MapError, Unit] =
     val parsed: Either[MapError, List[Option[ParsedElement]]] =
       dataLines.foldLeft[Either[MapError, List[Option[ParsedElement]]]](Right(Nil)) { (accE, line) =>
@@ -16,12 +19,41 @@ class MapManager() extends ForValidatingMap:
       }
 
     parsed.flatMap { elemsReversed =>
-      val elems = elemsReversed.reverse
-      val hasMap = elems.exists {
-        case Some(MapDimensions(_, _)) => true
-        case _                         => false
+      val elems = elemsReversed.reverse.flatten
+
+      val mapDims = elems.collectFirst {
+        case MapDimensions(w, h) => (w, h)
       }
-      if hasMap then Right(()) else Left(IllegalMapFormat())
+
+      mapDims match
+        case None => Left(IllegalMapFormat())
+        case Some((width, height)) =>
+          val npcs = elems.collect {
+            case NpcAt(x, y) => Position(x, y)
+          }
+
+          val fightable = elems.collect {
+            case PcAt(x, y, lvl, race, cls, ac, hp) =>
+              val character = DndCharacter(race, cls, "", ac, hp, 0)
+              (character, Position(x, y))
+          }
+
+          val maybePlayer = elems.collectFirst {
+            case CharacterAt(x, y, lvl, race, cls, ac, hp, orientation) =>
+              val character = DndCharacter(race, cls, "", ac, hp, 0)
+              OrientedCharacter(character, Position(x, y), orientation)
+          }
+
+          val gold = elems.collect {
+            case GoldAt(x, y, amount) => (Position(x, y), amount)
+          }
+
+          maybePlayer match
+            case None => Left(IllegalMapFormat())
+            case Some(player) =>
+              val mapState = DndMapState(width, height, npcs, fightable, player, gold)
+              storage.saveMapState(mapState)
+              Right(())
     }
 
   sealed trait ParsedElement
