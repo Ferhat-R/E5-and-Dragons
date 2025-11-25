@@ -1,6 +1,7 @@
-import domain.{MapManager, MovementEngine}
+import domain.{MapManager, MovementEngine, FightingEngine}
 import data.MutableCollectionDataStorageAdapter
 import rendering.ConsoleRenderingAdapter
+import randomness.MachineDefaultRandomnessAdapter
 import actions.CardinalDirection
 import scala.io.StdIn
 import scala.io.Source
@@ -8,8 +9,10 @@ import scala.io.Source
 @main def Main(): Unit =
   val storageAdapter   = MutableCollectionDataStorageAdapter()
   val renderingAdapter = ConsoleRenderingAdapter()
+  val randomnessAdapter = MachineDefaultRandomnessAdapter()
   val mapManager       = MapManager(storageAdapter)
-  val movementEngine   = MovementEngine(storageAdapter)
+  val fightingEngine   = FightingEngine(randomnessAdapter, renderingAdapter)
+  val movementEngine   = MovementEngine(storageAdapter, fightingEngine)
 
   val mapFile = this.getClass.getClassLoader.getResourceAsStream("e5-dungeon.dndmap")
 

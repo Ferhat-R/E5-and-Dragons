@@ -5,7 +5,16 @@ import out.{ExplorationRenderingPortOut, FightRenderingPortOut}
 
 class ConsoleRenderingAdapter extends FightRenderingPortOut, ExplorationRenderingPortOut:
   override def renderFightState(fightState: FightState): Unit =
-    ()
+    println()
+    println("⚔️  COMBAT ⚔️")
+    println("=" * 40)
+    println(s"${fightState.character1Name}: ${fightState.character1CurrentHp}/${fightState.character1.hp} HP")
+    println(s"${fightState.character2Name}: ${fightState.character2CurrentHp}/${fightState.character2.hp} HP")
+    println()
+    println(s"Turn: ${fightState.currentTurn}")
+    println(s">> ${fightState.lastAction}")
+    println("=" * 40)
+    println()
 
   override def renderMapState(dndMap: DndMapState): Unit =
     val width  = dndMap.width

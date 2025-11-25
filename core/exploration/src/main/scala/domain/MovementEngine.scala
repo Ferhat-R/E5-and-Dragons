@@ -2,16 +2,46 @@ package domain
 
 import actions.{CardinalDirection, NextAction}
 import in.ForMovingCharacter
+import domain.{FightingEngine}
 import model.{DndMapState, Position, OrientedCharacter}
 import out.ExplorationDataPortOut
+import errors.Death
 
-class MovementEngine(storage: ExplorationDataPortOut) extends ForMovingCharacter:
+class MovementEngine(storage: ExplorationDataPortOut, fightingEngine: FightingEngine) extends ForMovingCharacter:
   override def move(cardinalDirection: CardinalDirection): NextAction =
     storage.loadMapState() match
       case Some(current) =>
         val moved = movePlayer(current, cardinalDirection)
-        storage.saveMapState(moved)
-        NextAction.MOVE
+        
+        // Check if player is on an enemy position
+        val playerPos = moved.playerCharacter.position
+        val enemyAtPosition = moved.fightableCharacters.find { case (_, pos) => 
+          pos.x == playerPos.x && pos.y == playerPos.y 
+        }
+        
+        enemyAtPosition match
+          case Some((enemy, enemyPos)) =>
+            // Combat triggered!
+            fightingEngine.fight(moved.playerCharacter.character, enemy) match
+              case Right(updatedPlayer) =>
+                // Player won! Update player and remove enemy
+                val updatedPlayerCharacter = moved.playerCharacter.copy(
+                  character = updatedPlayer
+                )
+                val updatedMap = moved.copy(
+                  playerCharacter = updatedPlayerCharacter,
+                  fightableCharacters = moved.fightableCharacters.filterNot(_._2 == enemyPos)
+                )
+                storage.saveMapState(updatedMap)
+                NextAction.FIGHT
+              case Left(Death()) =>
+                // Player died
+                println("\n💀 YOU DIED! GAME OVER 💀\n")
+                NextAction.FIGHT  // Using FIGHT to signal combat happened, Main will handle death
+          case None =>
+            // No enemy, just save the move
+            storage.saveMapState(moved)
+            NextAction.MOVE
       case None =>
         NextAction.MOVE
 
@@ -34,3 +64,4 @@ class MovementEngine(storage: ExplorationDataPortOut) extends ForMovingCharacter
 
     val updatedPlayer = player.copy(position = newPos)
     state.copy(playerCharacter = updatedPlayer)
+
