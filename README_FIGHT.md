@@ -149,19 +149,6 @@ Ceci permet à `MovementEngine` d'utiliser `FightingEngine`.
 
 ---
 
-## ✅ Tests
-
-Pour compiler le projet :
-```bash
-sbt compile
-```
-
-Pour lancer uniquement les tests du module combat :
-```bash
-sbt combat/test
-```
-
----
 
 ## 📝 Fichiers Modifiés dans cette Branche
 
