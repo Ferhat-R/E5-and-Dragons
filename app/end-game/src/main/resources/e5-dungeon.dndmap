@@ -1,6 +1,6 @@
 -- Map of 3(width) x 4(height)
 -- Origin point is top left
-M - 3 - 4
+M - 10 - 10
 
 -- NPC coordinates (1,0)
 NPC - 1 - 0

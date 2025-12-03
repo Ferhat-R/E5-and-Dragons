@@ -40,7 +40,7 @@ lazy val exploration =
       name := "exploration",
       libraryDependencies ++= Seq(munit)
     )
-    .dependsOn(commons)
+    .dependsOn(commons, combat)
 
 lazy val combat =
   (project in file("core/combat"))
