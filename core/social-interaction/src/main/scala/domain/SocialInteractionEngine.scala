@@ -64,5 +64,5 @@ class SocialInteractionEngine(renderingPortOut: SocialRenderingPortOut) extends 
         (character, "Votre arme brille d'une énergie mystique ! (Effet non implémenté)")
         
       case CharacterEffect.None =>
-        (character, "...")
+        (character, "Très bien.")
 

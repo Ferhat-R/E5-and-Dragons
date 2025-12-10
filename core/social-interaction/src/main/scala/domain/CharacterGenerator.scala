@@ -14,12 +14,17 @@ class CharacterGenerator extends ForGeneratingCharacters:
     generateCharacter(level, race, DndClass.PALADIN(level))
   
   override def generateCharacter(level: Int, race: DndRace, dndClass: DndClass): DndCharacter =
-    // Base HP calculation: 10 base + (level - 1) * 6 for Paladin
+    // Base HP calculation
     val baseHp = dndClass match
       case DndClass.PALADIN(lvl) => 10 + (lvl - 1) * 6
+      case DndClass.WIZARD(lvl)  => 6 + (lvl - 1) * 4
+      case DndClass.ROGUE(lvl)   => 8 + (lvl - 1) * 5
     
-    // Armor Class for Paladin (heavy armor)
-    val baseAc = 16
+    // Armor Class
+    val baseAc = dndClass match
+      case DndClass.PALADIN(_) => 16
+      case DndClass.WIZARD(_)  => 12
+      case DndClass.ROGUE(_)   => 14
     
     // Generate a random battle cry
     val shouts = Array(
