@@ -30,6 +30,7 @@ Le jeu se lance automatiquement et charge la carte `e5-dungeon.dndmap`.
 | **A** | Se déplacer vers l'Ouest  |
 | **S** | Se déplacer vers le Sud |
 | **D** | Se déplacer vers l'Est |
+| **I** | Utiliser une Potion de Soin (+10 HP) |
 | **Q** | Quitter le jeu |
 
 ---
@@ -54,7 +55,7 @@ Player at (0, 0) facing S
 | Symbole | Signification |
 |---------|---------------|
 | **P** | Votre personnage (Player) |
-| **N** | NPC (Personnage non-joueur) |
+| **N** | NPC (Personnage non-joueur) - **Marchez dessus pour parler !** |
 | **1, 2, 3...** | Ennemis combattables (numérotés) |
 | **G** | Or à ramasser (Gold) |
 | **.** | Case vide |
@@ -68,7 +69,36 @@ Player at (0, 0) facing S
 - Votre personnage ne peut pas sortir des limites de la carte
 - Chaque déplacement met à jour votre position et votre orientation
 
-### 2. Combat Automatique
+### 2. Interactions Sociales (NPCs)
+
+Quand vous marchez sur une case avec un **N** (NPC), un dialogue interactif s'affiche.
+
+#### Exemple de dialogue
+```
+=== DIALOGUE ===
+
+Marchand ambulant :
+"Salutations ! J'ai des potions de soin pour 50 pièces d'or."
+
+Choix possibles :
+  1. Acheter une potion (50 PO)
+  2. Avez-vous vu des monstres par ici ?
+  3. Au revoir.
+
+Votre choix (numéro) : 
+```
+
+- **Tapez le numéro** de votre choix et appuyez sur Entrée.
+- Certains choix ont des effets (soins, achat d'objets, buffs).
+
+### 3. Système de Potions
+
+- Vous pouvez acheter des potions auprès du **Marchand ambulant** (50 PO).
+- Appuyez sur **I** à tout moment (hors combat) pour boire une potion.
+- Effet : **+10 HP** (max 100 HP).
+- Le nombre de potions restantes est affiché quand vous en buvez une.
+
+### 4. Combat Automatique
 
 Le combat se déclenche **automatiquement** quand vous marchez sur une case avec un ennemi (numéros 1, 2, 3...).
 

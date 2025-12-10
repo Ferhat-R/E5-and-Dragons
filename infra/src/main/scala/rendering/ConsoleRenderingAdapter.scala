@@ -83,9 +83,9 @@ class ConsoleRenderingAdapter extends FightRenderingPortOut, ExplorationRenderin
     println(s"${dialogue.npc.npcName} :")
     println(s"\"${dialogue.npc.greeting}\"")
     println()
-    println("Réponses possibles :")
-    dialogue.npc.responses.zipWithIndex.foreach { case (response, idx) =>
-      println(s"  ${idx + 1}. $response")
+    println("Choix possibles :")
+    dialogue.npc.choices.zipWithIndex.foreach { case (choice, idx) =>
+      println(s"  ${idx + 1}. ${choice.text}")
     }
     println()
     println("================")

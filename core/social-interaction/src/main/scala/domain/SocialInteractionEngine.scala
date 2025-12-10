@@ -1,37 +1,38 @@
 package domain
 
 import in.ForInteracting
-import model.{DialogueState, NpcDialogue}
+import model.{DialogueState, NpcDialogue, DialogueChoice, CharacterEffect}
 import out.SocialRenderingPortOut
+import characters.DndCharacter
 
 class SocialInteractionEngine(renderingPortOut: SocialRenderingPortOut) extends ForInteracting:
   
   private val npcDialogues = List(
     NpcDialogue(
       "Marchand ambulant",
-      "Salutations, voyageur ! Je parcours ces donjons depuis des années...",
+      "Salutations ! J'ai des potions de soin pour 50 pièces d'or.",
       List(
-        "Que vendez-vous ?",
-        "Avez-vous vu des monstres par ici ?",
-        "Au revoir."
+        DialogueChoice("Acheter une potion (50 PO)", CharacterEffect.BuyPotion(50)),
+        DialogueChoice("Avez-vous vu des monstres ?", CharacterEffect.None),
+        DialogueChoice("Au revoir.", CharacterEffect.None)
       )
     ),
     NpcDialogue(
       "Vieux sage",
-      "Ah, un aventurier ! Laisse-moi te donner un conseil : méfie-toi des ombres.",
+      "Je peux bénir ton arme pour ton prochain combat, ou soigner tes blessures.",
       List(
-        "Quel genre de conseil pouvez-vous me donner ?",
-        "Connaissez-vous des secrets sur ce donjon ?",
-        "Merci, je dois y aller."
+        DialogueChoice("Bénissez mon arme (+2 dégâts)", CharacterEffect.BuffDamage(2)),
+        DialogueChoice("Soignez-moi (+10 HP)", CharacterEffect.Heal(10)),
+        DialogueChoice("Merci, je dois y aller.", CharacterEffect.None)
       )
     ),
     NpcDialogue(
       "Garde mystérieux",
-      "Halte ! Qui va là ? ... Oh, un simple aventurier. Passe ton chemin.",
+      "Halte ! Si tu veux passer, tu dois être prêt au combat.",
       List(
-        "Que gardez-vous ?",
-        "Y a-t-il un danger à proximité ?",
-        "D'accord, je pars."
+        DialogueChoice("Je suis prêt !", CharacterEffect.None),
+        DialogueChoice("Donnez-moi un conseil.", CharacterEffect.None),
+        DialogueChoice("Je pars.", CharacterEffect.None)
       )
     )
   )
@@ -45,3 +46,23 @@ class SocialInteractionEngine(renderingPortOut: SocialRenderingPortOut) extends 
     renderingPortOut.renderDialogue(dialogue)
     
     dialogue
+
+  override def processChoice(choice: DialogueChoice, character: DndCharacter): (DndCharacter, String) =
+    choice.effect match
+      case CharacterEffect.Heal(amount) =>
+        val newHp = Math.min(character.hp + amount, 100) // Cap HP at 100 for now
+        (character.copy(hp = newHp), s"Vous avez été soigné de $amount HP !")
+        
+      case CharacterEffect.BuyPotion(cost) =>
+        if character.gold >= cost then
+          (character.copy(gold = character.gold - cost, potions = character.potions + 1), "Vous avez acheté une potion !")
+        else
+          (character, "Pas assez d'or !")
+          
+      case CharacterEffect.BuffDamage(amount) =>
+        // For now, just a message as we don't have temp buffs in DndCharacter yet
+        (character, "Votre arme brille d'une énergie mystique ! (Effet non implémenté)")
+        
+      case CharacterEffect.None =>
+        (character, "...")
+

@@ -1,15 +1,22 @@
--- Map of 3(width) x 4(height)
--- Origin point is top left
-M - 10 - 10
+-- Map of 20(width) x 10(height)
+M - 20 - 10
 
--- NPC coordinates (1,0)
+-- NPC coordinates
 NPC - 1 - 0
+NPC - 5 - 5
+NPC - 15 - 8
 
--- PC(villain) coordinates (2,1), lvl, class, race, AC, HP
+-- Enemies: x, y, lvl, class, race, AC, HP
 PC - 2 - 1 - 6 - HUMAN - PALADIN - 13 - 25
+PC - 8 - 4 - 5 - HUMAN - ROGUE - 12 - 20
+PC - 12 - 2 - 7 - HUMAN - WIZARD - 11 - 18
+PC - 18 - 9 - 8 - HUMAN - PALADIN - 15 - 30
 
--- Character coordinates (2,1), lvl, class, race, AC, HP, Orientation
+-- Player Start: x, y, lvl, class, race, AC, HP, Orientation
 C - 0 - 0 - 6 - HUMAN - PALADIN - 13 - 25 - S
 
--- Gold Pieces coordinates, amount
-GP - 0 - 3 - 2
+-- Gold Pieces: x, y, amount
+GP - 0 - 3 - 50
+GP - 10 - 5 - 100
+GP - 19 - 0 - 200
+GP - 19 - 9 - 5002

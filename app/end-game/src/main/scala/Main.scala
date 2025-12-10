@@ -1,3 +1,4 @@
+import actions.NextAction
 import domain.{MapManager, MovementEngine, FightingEngine, SocialInteractionEngine}
 import data.MutableCollectionDataStorageAdapter
 import rendering.ConsoleRenderingAdapter
@@ -32,14 +33,18 @@ import scala.io.Source
               renderingAdapter.renderMapState(mapState)
 
               // Simple keyboard loop: WASD and arrow-like keys via letters
-              println("Use W/A/S/D to move (N/W/S/E), Q to quit.")
+              println("Use W/A/S/D to move, I to use potion, Q to quit.")
               var continue = true
               while continue do
                 val input = StdIn.readLine()
-                input match
-                  case null => continue = false
+                
+                val actionResult = input match
+                  case null => 
+                    continue = false
+                    NextAction.MOVE
                   case s if s.equalsIgnoreCase("q") =>
                     continue = false
+                    NextAction.MOVE
                   case s if s.equalsIgnoreCase("w") =>
                     movementEngine.move(CardinalDirection.NORTH)
                   case s if s.equalsIgnoreCase("s") =>
@@ -48,8 +53,54 @@ import scala.io.Source
                     movementEngine.move(CardinalDirection.WEST)
                   case s if s.equalsIgnoreCase("d") =>
                     movementEngine.move(CardinalDirection.EAST)
+                  case s if s.equalsIgnoreCase("i") =>
+                    // Use potion logic
+                    storageAdapter.lastMapState.foreach { currentState =>
+                      val player = currentState.playerCharacter.character
+                      if player.potions > 0 then
+                        val newHp = Math.min(player.hp + 10, 100)
+                        val newPlayer = player.copy(hp = newHp, potions = player.potions - 1)
+                        val updatedMap = currentState.copy(
+                          playerCharacter = currentState.playerCharacter.copy(character = newPlayer)
+                        )
+                        storageAdapter.saveMapState(updatedMap)
+                        println(s"Vous avez utilisé une potion ! HP: $newHp, Potions restantes: ${player.potions - 1}")
+                      else
+                        println("Vous n'avez pas de potions !")
+                    }
+                    NextAction.MOVE
                   case _ =>
-                    println("Unknown command. Use W/A/S/D to move, Q to quit.")
+                    println("Unknown command. Use W/A/S/D to move, I for potion, Q to quit.")
+                    NextAction.MOVE
+
+                // Handle interaction if needed
+                if actionResult == NextAction.INTERACT then
+                  val dialogue = socialEngine.interact()
+                  var inDialogue = true
+                  while inDialogue do
+                    println("Votre choix (numéro) : ")
+                    val choiceInput = StdIn.readLine()
+                    try
+                      val choiceIdx = choiceInput.toInt - 1
+                      if choiceIdx >= 0 && choiceIdx < dialogue.npc.choices.length then
+                        val choice = dialogue.npc.choices(choiceIdx)
+                        
+                        // Process choice effect
+                        storageAdapter.lastMapState.foreach { currentState =>
+                          val (updatedChar, message) = socialEngine.processChoice(choice, currentState.playerCharacter.character)
+                          println(s">> $message")
+                          
+                          // Update player state
+                          val updatedMap = currentState.copy(
+                            playerCharacter = currentState.playerCharacter.copy(character = updatedChar)
+                          )
+                          storageAdapter.saveMapState(updatedMap)
+                        }
+                        inDialogue = false
+                      else
+                        println("Choix invalide.")
+                    catch
+                      case _: NumberFormatException => println("Veuillez entrer un numéro.")
 
                 // After any move attempt, re-render latest state
                 storageAdapter.lastMapState.foreach(renderingAdapter.renderMapState)

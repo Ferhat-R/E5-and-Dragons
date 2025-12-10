@@ -51,9 +51,9 @@ class MovementEngine(
             npcAtPosition match
               case Some(_) =>
                 // NPC interaction triggered!
-                socialEngine.interact()
+                // We don't call interact() here anymore, we let Main handle the loop
                 storage.saveMapState(moved)
-                NextAction.MOVE
+                NextAction.INTERACT
               case None =>
                 // No enemy, no NPC, just save the move
                 storage.saveMapState(moved)
