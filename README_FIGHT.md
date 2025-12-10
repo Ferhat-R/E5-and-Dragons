@@ -1,12 +1,12 @@
 # E5-and-Dragons - Branche `fight`
 
-## 🎮 Combat System Implementation
+## Combat System Implementation
 
 Cette branche contient l'implémentation complète du système de combat automatique basé sur les mécaniques D&D 5e.
 
 ---
 
-## 🚀 Lancer le Jeu
+## Lancer le Jeu
 
 ### Prérequis
 - **sbt** installé (Scala Build Tool)
@@ -28,19 +28,19 @@ sbt endGame/run
 
 ---
 
-## 🎯 Contrôles
+## Contrôles
 
 | Touche | Action |
 |--------|--------|
-| **W** | Déplacement Nord ⬆️ |
-| **A** | Déplacement Ouest ⬅️ |
-| **S** | Déplacement Sud ⬇️ |
-| **D** | Déplacement Est ➡️ |
+| **W** | Déplacement Nord |
+| **A** | Déplacement Ouest |
+| **S** | Déplacement Sud |
+| **D** | Déplacement Est |
 | **Q** | Quitter le jeu |
 
 ---
 
-## ⚔️ Comment Déclencher un Combat
+## Comment Déclencher un Combat
 
 Le combat se déclenche **automatiquement** quand vous marchez sur une case avec un ennemi.
 
@@ -57,12 +57,12 @@ Depuis la position de départ (0,0) :
 ```
 D   # Déplacement Est → (1,0)
 D   # Déplacement Est → (2,0)
-S   # Déplacement Sud → (2,1) → ⚔️ COMBAT !
+S   # Déplacement Sud → (2,1) → COMBAT !
 ```
 
 ---
 
-## 🎲 Système de Combat
+## Système de Combat
 
 Le combat suit les règles D&D 5e simplifiées :
 
@@ -84,10 +84,10 @@ Le combat suit les règles D&D 5e simplifiées :
 
 ---
 
-## 📊 Exemple de Combat
+## Exemple de Combat
 
 ```
-⚔️  COMBAT ⚔️
+COMBAT
 ========================================
 Player: 25/25 HP
 Villain: 25/25 HP
@@ -108,7 +108,7 @@ Turn: Villain
 
 ---
 
-## 🏗️ Architecture du Code
+## Architecture du Code
 
 ### Modules Modifiés
 
@@ -136,7 +136,7 @@ Turn: Villain
 
 ---
 
-## 📦 Dépendances
+## Dépendances
 
 Modification du `build.sbt` :
 ```scala
@@ -150,7 +150,7 @@ Ceci permet à `MovementEngine` d'utiliser `FightingEngine`.
 ---
 
 
-## 📝 Fichiers Modifiés dans cette Branche
+## Fichiers Modifiés dans cette Branche
 
 | Fichier | Modifications |
 |---------|---------------|
@@ -166,7 +166,7 @@ Ceci permet à `MovementEngine` d'utiliser `FightingEngine`.
 
 ---
 
-## 🎯 Prochaines Étapes Possibles
+## Prochaines Étapes Possibles
 
 - [ ] Ajouter plus de types d'ennemis
 - [ ] Implémenter un système d'inventaire
@@ -177,13 +177,13 @@ Ceci permet à `MovementEngine` d'utiliser `FightingEngine`.
 
 ---
 
-## 🐛 Problèmes Connus
+## Problèmes Connus
 
 Aucun problème connu pour le moment. Le système compile et fonctionne correctement.
 
 ---
 
-## 📖 Plus d'Informations
+## Plus d'Informations
 
 Pour plus de détails sur l'implémentation, consultez le code source ou les commentaires dans le commit principal de cette branche.
 
@@ -194,4 +194,4 @@ feat: Implement automatic combat system with D&D 5e mechanics
 
 ---
 
-**Bon jeu ! ⚔️🎲**
+**Bon jeu !**
