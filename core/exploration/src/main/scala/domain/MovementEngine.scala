@@ -36,7 +36,7 @@ class MovementEngine(storage: ExplorationDataPortOut, fightingEngine: FightingEn
                 NextAction.FIGHT
               case Left(Death()) =>
                 // Player died
-                println("\n💀 YOU DIED! GAME OVER 💀\n")
+                println("\nYOU DIED! GAME OVER\n")
                 NextAction.FIGHT  // Using FIGHT to signal combat happened, Main will handle death
           case None =>
             // No enemy, just save the move

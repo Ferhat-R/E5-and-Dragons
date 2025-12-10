@@ -6,7 +6,7 @@ import out.{ExplorationRenderingPortOut, FightRenderingPortOut}
 class ConsoleRenderingAdapter extends FightRenderingPortOut, ExplorationRenderingPortOut:
   override def renderFightState(fightState: FightState): Unit =
     println()
-    println("⚔️  COMBAT ⚔️")
+    println("COMBAT")
     println("=" * 40)
     println(s"${fightState.character1Name}: ${fightState.character1CurrentHp}/${fightState.character1.hp} HP")
     println(s"${fightState.character2Name}: ${fightState.character2CurrentHp}/${fightState.character2.hp} HP")
