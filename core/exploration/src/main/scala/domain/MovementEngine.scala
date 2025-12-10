@@ -1,13 +1,17 @@
 package domain
 
 import actions.{CardinalDirection, NextAction}
-import in.ForMovingCharacter
+import in.{ForMovingCharacter, ForInteracting}
 import domain.{FightingEngine}
 import model.{DndMapState, Position, OrientedCharacter}
 import out.ExplorationDataPortOut
 import errors.Death
 
-class MovementEngine(storage: ExplorationDataPortOut, fightingEngine: FightingEngine) extends ForMovingCharacter:
+class MovementEngine(
+  storage: ExplorationDataPortOut, 
+  fightingEngine: FightingEngine,
+  socialEngine: ForInteracting
+) extends ForMovingCharacter:
   override def move(cardinalDirection: CardinalDirection): NextAction =
     storage.loadMapState() match
       case Some(current) =>
@@ -39,9 +43,21 @@ class MovementEngine(storage: ExplorationDataPortOut, fightingEngine: FightingEn
                 println("\nYOU DIED! GAME OVER\n")
                 NextAction.FIGHT  // Using FIGHT to signal combat happened, Main will handle death
           case None =>
-            // No enemy, just save the move
-            storage.saveMapState(moved)
-            NextAction.MOVE
+            // No enemy, check for NPC
+            val npcAtPosition = moved.npcs.find { pos =>
+              pos.x == playerPos.x && pos.y == playerPos.y
+            }
+            
+            npcAtPosition match
+              case Some(_) =>
+                // NPC interaction triggered!
+                socialEngine.interact()
+                storage.saveMapState(moved)
+                NextAction.MOVE
+              case None =>
+                // No enemy, no NPC, just save the move
+                storage.saveMapState(moved)
+                NextAction.MOVE
       case None =>
         NextAction.MOVE
 

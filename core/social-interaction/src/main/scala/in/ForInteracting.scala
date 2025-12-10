@@ -1,3 +1,6 @@
 package in
 
-trait ForInteracting
+import model.DialogueState
+
+trait ForInteracting:
+  def interact(): DialogueState

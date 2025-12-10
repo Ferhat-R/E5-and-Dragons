@@ -1,9 +1,9 @@
 package rendering
 
-import model.{DndMapState, FightState, Position}
-import out.{ExplorationRenderingPortOut, FightRenderingPortOut}
+import model.{DndMapState, FightState, Position, DialogueState}
+import out.{ExplorationRenderingPortOut, FightRenderingPortOut, SocialRenderingPortOut}
 
-class ConsoleRenderingAdapter extends FightRenderingPortOut, ExplorationRenderingPortOut:
+class ConsoleRenderingAdapter extends FightRenderingPortOut, ExplorationRenderingPortOut, SocialRenderingPortOut:
   override def renderFightState(fightState: FightState): Unit =
     println()
     println("COMBAT")
@@ -73,4 +73,20 @@ class ConsoleRenderingAdapter extends FightRenderingPortOut, ExplorationRenderin
         println(s"  - ${amount} GP at (${pos.x}, ${pos.y})")
       }
 
+
     println("=" * (width * 2))
+
+  override def renderDialogue(dialogue: DialogueState): Unit =
+    println()
+    println("=== DIALOGUE ===")
+    println()
+    println(s"${dialogue.npc.npcName} :")
+    println(s"\"${dialogue.npc.greeting}\"")
+    println()
+    println("Réponses possibles :")
+    dialogue.npc.responses.zipWithIndex.foreach { case (response, idx) =>
+      println(s"  ${idx + 1}. $response")
+    }
+    println()
+    println("================")
+    println()
