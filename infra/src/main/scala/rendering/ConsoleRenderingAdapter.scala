@@ -1,12 +1,12 @@
 package rendering
 
-import model.{DndMapState, FightState, Position}
-import out.{ExplorationRenderingPortOut, FightRenderingPortOut}
+import model.{DndMapState, FightState, Position, DialogueState}
+import out.{ExplorationRenderingPortOut, FightRenderingPortOut, SocialRenderingPortOut}
 
-class ConsoleRenderingAdapter extends FightRenderingPortOut, ExplorationRenderingPortOut:
+class ConsoleRenderingAdapter extends FightRenderingPortOut, ExplorationRenderingPortOut, SocialRenderingPortOut:
   override def renderFightState(fightState: FightState): Unit =
     println()
-    println("⚔️  COMBAT ⚔️")
+    println("COMBAT")
     println("=" * 40)
     println(s"${fightState.character1Name}: ${fightState.character1CurrentHp}/${fightState.character1.hp} HP")
     println(s"${fightState.character2Name}: ${fightState.character2CurrentHp}/${fightState.character2.hp} HP")
@@ -73,4 +73,20 @@ class ConsoleRenderingAdapter extends FightRenderingPortOut, ExplorationRenderin
         println(s"  - ${amount} GP at (${pos.x}, ${pos.y})")
       }
 
+
     println("=" * (width * 2))
+
+  override def renderDialogue(dialogue: DialogueState): Unit =
+    println()
+    println("=== DIALOGUE ===")
+    println()
+    println(s"${dialogue.npc.npcName} :")
+    println(s"\"${dialogue.npc.greeting}\"")
+    println()
+    println("Choix possibles :")
+    dialogue.npc.choices.zipWithIndex.foreach { case (choice, idx) =>
+      println(s"  ${idx + 1}. ${choice.text}")
+    }
+    println()
+    println("================")
+    println()
