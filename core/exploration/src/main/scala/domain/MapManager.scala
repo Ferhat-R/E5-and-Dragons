@@ -155,8 +155,8 @@ class MapManager(storage: ExplorationDataPortOut) extends ForValidatingMap:
   private def parseClass(value: String, lvl: Int): Option[characters.DndClass] =
     value.toUpperCase match
       case "PALADIN" => Some(characters.DndClass.PALADIN(lvl))
-      case _          => None
-
+      case "ROGUE" => Some(characters.DndClass.ROGUE(lvl))
+      case "WIZARD" => Some(characters.DndClass.WIZARD(lvl))
   private def parseOrientation(value: String): Option[CardinalDirection] =
     value.toUpperCase match
       case "N" | "NORTH" => Some(CardinalDirection.NORTH)
